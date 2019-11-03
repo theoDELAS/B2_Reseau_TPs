@@ -208,8 +208,7 @@ Pour le moment je fais en sorte que tous le monde puisse `ping` tous le monde et
         IOU1(config-vlan)#name imprimantes
         IOU1(config-vlan)#exit
         IOU1(config)#exit
-        ```  
-        Fait sur chaque `switch`  
+        ```
 
 
     - Configurer une interface entre deux `switches` en mode *trunk* 
@@ -221,8 +220,7 @@ Pour le moment je fais en sorte que tous le monde puisse `ping` tous le monde et
         IOU1(config-if)#switchport trunk allowed vlan 10,20,30,40,50,60
         IOU1(config-if)#exit
         IOU1(config)#exit
-        ```   
-        Fait sur chaque `switch` (la aussi)
+        ```
 
 
     - Assigner une interface pour donner accès à un `vlan` en mode *access*  
@@ -280,4 +278,44 @@ Pour le moment je fais en sorte que tous le monde puisse `ping` tous le monde et
         VPCS> ping 10.3.20.254
         84 bytes from 10.3.20.254 icmp_seq=1 ttl=255 time=12.180 ms
         84 bytes from 10.3.20.254 icmp_seq=2 ttl=255 time=2.889 ms
+        ```
+- Config du NAT pour l'accès internet
+    - Récupérer une `IP` automatiquement en `dhcp`
+        ```
+        R1# conf t
+        R1(config)# interface Ethernet 0/0
+        R1(config-if)# ip address dhcp
+        R1(config-if)# no shut
+        ```
+    - Configuration du `NAT`
+        ```
+        R1# conf t
+        R1(config)# interface Ethernet 0/1
+        R1(config-if)# ip nat outside
+        R1(config-if)# exit
+
+        R1(config)# interface Ethernet 1/0
+        R1(config-if)# ip nat inside
+        R1(config-if)# exit
+        ```
+        Puis :  
+        ```
+        R1# conf t
+        R1(config)# ip nat inside source list 1 interface Ethernet 0/0 overload
+        R1(config)# access-list 1 permit any
+        ```
+        Et enfin, partager la route par défaut à tout le monde :  
+        ```
+        R1# conf t
+        R1(config)# router ospf 1
+        R1(config-router)# default-information originate
+        ```
+    - Ping `google` pour vérifier :  
+        ```
+        R1#ping 8.8.8.8
+
+        Type escape sequence to abort.
+        Sending 5, 100-byte ICMP Echos to 8.8.8.8, timeout is 2 seconds:
+        !!!!!
+        Success rate is 100 percent (5/5), round-trip min/avg/max = 80/92/96 ms
         ```
