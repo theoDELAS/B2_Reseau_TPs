@@ -1,0 +1,1 @@
+![Hidden servcie](../assets/welcome_centos_onion.PNG)

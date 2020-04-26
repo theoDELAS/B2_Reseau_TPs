@@ -1,0 +1,1 @@
+![Ping entre guests](../assets/ping_guest_guest.PNG)

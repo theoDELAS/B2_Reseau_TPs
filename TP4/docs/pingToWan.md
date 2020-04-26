@@ -1,0 +1,1 @@
+![Ping entre web et internet](../assets/ping_web_wlan.PNG)

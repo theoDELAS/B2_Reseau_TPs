@@ -1,0 +1,1 @@
+![Ping entre admins](../assets/ping_admin_admin.PNG)
